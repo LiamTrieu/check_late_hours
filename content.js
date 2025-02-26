@@ -60,23 +60,28 @@ function checkTimeLate(data) {
 }
 
 function insertInfoLate(value) {
-  const divElement = document.getElementById("function-buttons");
+  const divElement = document.getElementById('function-buttons');
   if (!divElement) return;
 
-  let infoLateElement = document.getElementById("info-late");
+  let infoLateElement = document.getElementById('info-late');
 
   const remainingMinutes = value ? 180 - value : 0;
   const blackList = getBlackListFromStorage();
+  const monthAndYear = getMonthAndYear();
 
   const formattedBlackList = blackList
+    .filter((date) => {
+      const [year, month] = date.split('-');
+      return year === monthAndYear[2] && month === monthAndYear[1].padStart(2, '0');
+    })
     .map((date) => {
-      const [year, month, day] = date.split("-");
+      const [year, month, day] = date.split('-');
       return `${day}-${month}-${year}`;
     })
-    .join("\n");
+    .join('\n');
 
   const blackListText =
-    blackList.length > 0 ? `\nNgày không kiểm tra:\n${formattedBlackList}` : "";
+  formattedBlackList ? `\nNgày không kiểm tra:\n${formattedBlackList}` : '';
 
   const newTitle = `Số phút còn lại: ${remainingMinutes} phút${blackListText}`;
   const newTextContent = `${value} | 180`;
@@ -93,10 +98,9 @@ function insertInfoLate(value) {
             ${newTextContent}
         </h4>`;
 
-    divElement.insertAdjacentHTML("afterbegin", infoLateHTML);
+    divElement.insertAdjacentHTML('afterbegin', infoLateHTML);
   }
 }
-
 
 document.addEventListener(
   'click',
