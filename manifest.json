@@ -9,7 +9,7 @@
   "content_scripts": [
     {
       "matches": ["*://portal.newwave.vn/*"],
-      "run_at": "document_start",
+      "run_at": "document_idle",
       "js": ["content.js"]
     }
   ],
